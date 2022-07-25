@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vproapp
+  labels:
+    app: vproapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vproapp
+  template:
+    metadata:
+      labels:
+        app: vproapp
+    spec:
+      containers:
+        - name: vproapp
+          image: 567798517868.dkr.ecr.us-east-2.amazonaws.com/vpro-app:latest
+          imagePullPolicy: Always
+          ports:
+            - name: vproapp-port
+              containerPort: 8080

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: vproapp
-          image: 567798517868.dkr.ecr.us-east-2.amazonaws.com/vpro-app:latest
+          image: 567798517868.dkr.ecr.us-east-2.amazonaws.com/vpro-app:LATEST_TAG
           imagePullPolicy: Always
           ports:
             - name: vproapp-port

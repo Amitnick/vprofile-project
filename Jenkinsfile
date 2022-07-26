@@ -133,7 +133,7 @@ pipeline {
 
         stage ('Generate Report'){
             steps {
-                recordIssues(tools: [junitParser(id: 'JUnit-issues'), owaspDependencyCheck(id: 'OWASP-issues', pattern: '**/dependency-check-report.xml')])
+                recordIssues(tools: [checkStyle(id: 'CheckStyle-Issues', pattern: '**/checkstyle-result.xml'), owaspDependencyCheck(id: 'OWASP-issues', pattern: '**/dependency-check-report.xml')])
             }
         }
 

@@ -119,14 +119,15 @@ pipeline {
 
         stage ('Create & Push Image'){
             steps {
-                sh 'ls ./docker/app'
-                sh 'aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 567798517868.dkr.ecr.us-east-2.amazonaws.com'
-                sh "cp target/*.war ./docker/app/ && cd ./docker/app && docker build -t vpro-app ."
-                sh "docker tag vpro-app 567798517868.dkr.ecr.us-east-2.amazonaws.com/vpro-app:${env.BUILD_ID} && docker push 567798517868.dkr.ecr.us-east-2.amazonaws.com/vpro-app:${env.BUILD_ID}"
-                sh "docker tag vpro-app 567798517868.dkr.ecr.us-east-2.amazonaws.com/vpro-app:latest && docker push 567798517868.dkr.ecr.us-east-2.amazonaws.com/vpro-app:latest"
-                sh "docker images"
-                sh "docker rmi 567798517868.dkr.ecr.us-east-2.amazonaws.com/vpro-app:${env.BUILD_ID} 567798517868.dkr.ecr.us-east-2.amazonaws.com/vpro-app:latest"
-                sh "docker images"
+                sh """
+                    aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 567798517868.dkr.ecr.us-east-2.amazonaws.com
+                    cp target/*.war ./docker/app/ && cd ./docker/app && docker build -t vpro-app .
+                    docker tag vpro-app 567798517868.dkr.ecr.us-east-2.amazonaws.com/vpro-app:${env.BUILD_ID} && docker push 567798517868.dkr.ecr.us-east-2.amazonaws.com/vpro-app:${env.BUILD_ID}
+                    docker tag vpro-app 567798517868.dkr.ecr.us-east-2.amazonaws.com/vpro-app:latest && docker push 567798517868.dkr.ecr.us-east-2.amazonaws.com/vpro-app:latest
+                    docker images
+                    docker rmi 567798517868.dkr.ecr.us-east-2.amazonaws.com/vpro-app:${env.BUILD_ID} 567798517868.dkr.ecr.us-east-2.amazonaws.com/vpro-app:latest
+                    docker images
+                """
             }
             post {
                 success {

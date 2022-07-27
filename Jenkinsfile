@@ -50,7 +50,13 @@ pipeline {
             }
         }
 
-        stage('CODE ANALYSIS with SONARQUBE') {
+        stage('OWASP-CHECK') {
+            steps {
+                dependencyCheck additionalArguments: '--format JSON', odcInstallation: 'OWASP-check'
+            }
+        }
+
+        stage('CODE ANALYSIS: SONARQUBE') {
             environment {
                 scannerHome = tool 'mysonarscanner4'
             }
@@ -82,12 +88,6 @@ pipeline {
                     echo 'Now Archiving...'
                     archiveArtifacts artifacts: '**/target/*.war'
                 }
-            }
-        }
-
-        stage('OWASP-CHECK') {
-            steps {
-                dependencyCheck additionalArguments: '--format JSON', odcInstallation: 'OWASP-check'
             }
         }
 

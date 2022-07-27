@@ -143,7 +143,7 @@ pipeline {
             post {
                 success {
                     echo 'Image Deployed'
-                    echo "SERVICE ENDPOINT: $(kubectl get svc | grep LoadBalancer | awk '{print $4}')"
+                    echo "SERVICE ENDPOINT: $(kubectl get svc | grep LoadBalancer | awk '{print \$4}')"
                 }
             }
         }

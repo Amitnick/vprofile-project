@@ -45,6 +45,7 @@ pipeline {
             }
             post {
                 success {
+                    recordIssues(tools: [checkStyle(id: 'CheckStyle-Issues', pattern: 'target/checkstyle-result.xml')])
                     echo 'Generated Analysis Result'
                 }
             }
@@ -53,6 +54,12 @@ pipeline {
         stage('OWASP-CHECK') {
             steps {
                 dependencyCheck additionalArguments: '--format JSON', odcInstallation: 'OWASP-check'
+            }
+            post {
+                success {
+                    recordIssues(tools: [cowaspDependencyCheck(id: 'OWASP-issues', pattern: 'dependency-check-report.json')])
+                    echo 'Generated Analysis Result'
+                }
             }
         }
 
@@ -88,12 +95,6 @@ pipeline {
                     echo 'Now Archiving...'
                     archiveArtifacts artifacts: '**/target/*.war'
                 }
-            }
-        }
-
-        stage ('GENERATE REPORT'){
-            steps {
-                recordIssues(tools: [checkStyle(id: 'CheckStyle-Issues', pattern: 'target/checkstyle-result.xml'), owaspDependencyCheck(id: 'OWASP-issues', pattern: 'dependency-check-report.json')])
             }
         }
 

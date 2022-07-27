@@ -57,7 +57,7 @@ pipeline {
             }
             post {
                 success {
-                    recordIssues(tools: [cowaspDependencyCheck(id: 'OWASP-issues', pattern: 'dependency-check-report.json')])
+                    recordIssues(tools: [owaspDependencyCheck(id: 'OWASP-issues', pattern: 'dependency-check-report.json')])
                     echo 'Generated Analysis Result'
                 }
             }

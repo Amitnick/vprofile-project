@@ -9,11 +9,11 @@ pipeline {
     environment {
         NEXUS_VERSION = "nexus3"
         NEXUS_PROTOCOL = "http"
-        NEXUS_URL = "172.31.10.108:8081"
+        NEXUS_URL = "18.222.73.88:8081"
         NEXUS_REPOSITORY = "vprofile-release"
         NEXUS_REPOGRP_ID    = "vpro-maven-group"
         NEXUS_CREDENTIAL_ID = "admin"
-        NEXUSIP="172.31.1.5"
+        NEXUSIP="18.222.73.88"
         NEXUSPORT="8081"
         ARTVERSION = "${env.BUILD_ID}"
         scannerHome="vpro-sonar"
@@ -63,8 +63,7 @@ pipeline {
 
         stage('OWASP-check') {
             steps {
-                dependencyCheck additionalArguments: '', odcInstallation: 'OWASP-check'
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+                dependencyCheck additionalArguments: '--format JSON', odcInstallation: 'OWASP-check'
             }
         }
 
@@ -102,25 +101,6 @@ pipeline {
                     artifactExists = fileExists artifactPath;
                     if(artifactExists) {
                         echo "*** File: ${artifactPath}, group: ${pom.groupId}, packaging: ${pom.packaging}, version ${pom.version} ARTVERSION";
-                        // nexusArtifactUploader(
-                        //     nexusVersion: NEXUS_VERSION,
-                        //     protocol: NEXUS_PROTOCOL,
-                        //     nexusUrl: NEXUS_URL,
-                        //     groupId: NEXUS_REPOGRP_ID,
-                        //     version: ARTVERSION,
-                        //     repository: NEXUS_REPOSITORY,
-                        //     credentialsId: NEXUS_CREDENTIAL_ID,
-                        //     artifacts: [
-                        //         [artifactId: pom.artifactId,
-                        //         classifier: '',
-                        //         file: artifactPath,
-                        //         type: pom.packaging],
-                        //         [artifactId: pom.artifactId,
-                        //         classifier: '',
-                        //         file: "pom.xml",
-                        //         type: "pom"]
-                        //     ]
-                        // );
                         nexusArtifactUploader artifacts: [[artifactId: "${pom.artifactId}", classifier: '', file: "${artifactPath}", type: "${pom.packaging}"]], credentialsId: 'nexusServerLogin', groupId: 'QA1', nexusUrl: "${NEXUS_URL}", nexusVersion: 'nexus3', protocol: 'http', repository: 'vprofile-release', version: "${env.BUILD_ID}"
                     }
                     else {
@@ -133,7 +113,7 @@ pipeline {
 
         stage ('Generate Report'){
             steps {
-                recordIssues(tools: [checkStyle(id: 'CheckStyle-Issues', pattern: '**/checkstyle-result.xml'), owaspDependencyCheck(id: 'OWASP-issues', pattern: '**/dependency-check-report.xml')])
+                recordIssues(tools: [checkStyle(id: 'CheckStyle-Issues', pattern: 'target/checkstyle-result.xml'), owaspDependencyCheck(id: 'OWASP-issues', pattern: 'dependency-check-report.json')])
             }
         }
 
@@ -168,6 +148,5 @@ pipeline {
         }
 
     }
-
 
 }

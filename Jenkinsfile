@@ -114,12 +114,12 @@ pipeline {
         stage ('CONTAINERISE'){
             steps {
                 sh 'ls ./docker/app'
-                sh 'aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 567798517868.dkr.ecr.us-east-2.amazonaws.com'
+                sh 'aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 331912129882.dkr.ecr.us-west-2.amazonaws.com'
                 sh "cp target/*.war ./docker/app/ && cd ./docker/app && docker build -t vpro-app ."
-                sh "docker tag vpro-app 567798517868.dkr.ecr.us-east-2.amazonaws.com/vpro-app:${env.BUILD_ID} && docker push 567798517868.dkr.ecr.us-east-2.amazonaws.com/vpro-app:${env.BUILD_ID}"
-                sh "docker tag vpro-app 567798517868.dkr.ecr.us-east-2.amazonaws.com/vpro-app:latest && docker push 567798517868.dkr.ecr.us-east-2.amazonaws.com/vpro-app:latest"
+                sh "docker tag vpro-app 331912129882.dkr.ecr.us-west-2.amazonaws.com/vpro-app:${env.BUILD_ID} && docker push 331912129882.dkr.ecr.us-west-2.amazonaws.com/vpro-app:${env.BUILD_ID}"
+                sh "docker tag vpro-app 331912129882.dkr.ecr.us-west-2.amazonaws.com/vpro-app:latest && docker push 331912129882.dkr.ecr.us-west-2.amazonaws.com/vpro-app:latest"
                 sh "docker images"
-                sh "docker rmi 567798517868.dkr.ecr.us-east-2.amazonaws.com/vpro-app:${env.BUILD_ID} 567798517868.dkr.ecr.us-east-2.amazonaws.com/vpro-app:latest"
+                sh "docker rmi 331912129882.dkr.ecr.us-west-2.amazonaws.com/vpro-app:${env.BUILD_ID} 331912129882.dkr.ecr.us-west-2.amazonaws.com/vpro-app:latest"
                 sh "docker images"
             }
             post {
@@ -131,14 +131,14 @@ pipeline {
 
         stage ('DEPLOY ON CLUSTER'){
             steps {
-                sh 'aws eks --region us-east-2 update-kubeconfig --name my-cluster'
+                sh 'aws eks --region us-east-2 update-kubeconfig --name test-cluster'
                 sh "cd ./kube-scripts && pwd && sed -i \"s#LATEST_TAG#${env.BUILD_ID}#g\" app-dep.yaml && kubectl apply -f ."
             }
             post {
                 success {
                     echo 'Image Deployed'
                     sleep(60)
-                    sh 'ENDPOINT=$(kubectl get svc | grep LoadBalancer | awk \'{print $4}\') && echo "SERVICE ENDPOINT: ${ENDPOINT}"'
+                    sh 'ENDPOINT=$(kubectl get svc | grep LoadBalancer | awk \'{print $4}\') && echo "SERVICE ENDPOINT: http://${ENDPOINT}"'
 
                 }
             }

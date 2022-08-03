@@ -9,11 +9,11 @@ pipeline {
     environment {
         NEXUS_VERSION = "nexus3"
         NEXUS_PROTOCOL = "http"
-        NEXUS_URL = "18.222.73.88:8081"
+        NEXUS_URL = "44.239.33.93:8081"
         NEXUS_REPOSITORY = "vprofile-release"
         NEXUS_REPOGRP_ID    = "vpro-maven-group"
         NEXUS_CREDENTIAL_ID = "admin"
-        NEXUSIP="18.222.73.88"
+        NEXUSIP="44.239.33.93"
         NEXUSPORT="8081"
         ARTVERSION = "${env.BUILD_ID}"
         scannerHome="vpro-sonar"

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: vprodb
-          image: 567798517868.dkr.ecr.us-east-2.amazonaws.com/vpro-db:latest
+          image: 331912129882.dkr.ecr.us-west-2.amazonaws.com/vpro-db:latest
           imagePullPolicy: Always
           args:
             - "--ignore-db-dir=lost+found"

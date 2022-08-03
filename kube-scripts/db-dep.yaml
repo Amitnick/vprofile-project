@@ -33,7 +33,7 @@ spec:
                   name: app-secret
                   key: db-pass
       nodeSelector:
-        zone: us-west-2b                  
+        topology.kubernetes.io/zone: us-west-2b                  
       volumes:
         - name: vpro-db-data
           awsElasticBlockStore:

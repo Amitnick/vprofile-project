@@ -131,7 +131,7 @@ pipeline {
 
         stage ('DEPLOY ON CLUSTER'){
             steps {
-                sh 'aws eks --region us-east-2 update-kubeconfig --name test-cluster'
+                sh 'aws eks --region us-west-2 update-kubeconfig --name test-cluster'
                 sh "cd ./kube-scripts && pwd && sed -i \"s#LATEST_TAG#${env.BUILD_ID}#g\" app-dep.yaml && kubectl apply -f ."
             }
             post {

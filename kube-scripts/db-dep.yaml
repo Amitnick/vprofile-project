@@ -21,8 +21,8 @@ spec:
           args:
             - "--ignore-db-dir=lost+found"
           volumeMounts:
-             - mountPath: /var/lib/mysql
-               name: vpro-db-data 
+            - name: persistent-storage
+              mountPath: /var/lib/mysql
           ports:
             - name: vprodb-port
               containerPort: 3306
@@ -32,10 +32,7 @@ spec:
                 secretKeyRef:
                   name: app-secret
                   key: db-pass
-      nodeSelector:
-        topology.kubernetes.io/zone: us-west-2b                  
       volumes:
-        - name: vpro-db-data
-          awsElasticBlockStore:
-             volumeID: vol-0a715a48af587f541
-             fsType: ext4
+      - name: persistent-storage
+        persistentVolumeClaim:
+          claimName: ebs-claim

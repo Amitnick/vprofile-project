@@ -83,7 +83,7 @@
 
             <button class="btn btn-custom-LOGIN btn-lg  btn-block" type="submit">LOGIN</button>
             <h4 class="text-center"><a href="${contextPath}/registration">Create an account</a></h4>
-            <h4 class="text-center">WELCOME TO DEMO !!</h4>
+            
 
         </div>
 
